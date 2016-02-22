@@ -4,12 +4,6 @@ export Modem, createmodem, modulate, demodulate,display,
        getbps,getM, destroy, count_biterrors, PSK, DPSK, 
        ASK, QAM, phaseerror, evm
 
-
-const PSK="PSK"
-const DPSK="DPSK"
-const ASK="ASK"
-const QAM="QAM"
-
 immutable Modem
 	scheme::AbstractString
 	M::Int
@@ -17,34 +11,9 @@ immutable Modem
 end
 
 
-# function pskmodemPtr(M::Int)
-# 	scheme = round(Int,log2(M));
-# 	m = ccall((:modem_create,"libliquid"), Ptr{Void}, (Int32, ), scheme);
-# end
-
-# function dpskmodemPtr(M::Int)
-# 	scheme = round(Int,log2(M)) + 8;
-# 	m = ccall((:modem_create,"libliquid"), Ptr{Void}, (Int32, ), scheme);
-# end
-
-# function askmodemPtr(M::Int)
-# 	scheme = round(Int,log2(M)) + 16;
-# 	m = ccall((:modem_create,"libliquid"), Ptr{Void}, (Int32, ), scheme);
-# end
-
-# function qammodemPtr(M::Int)
-# 	scheme = round(Int, log2(M))
-# 	if(scheme <= 1)
-# 	  error("QAM2 is not possible")
-# 	else
-# 		scheme = scheme + 23;
-# 		m = ccall((:modem_create,"libliquid"), Ptr{Void}, (Int32, ), scheme);
-# 		return m;
-# 	end
-# end
-
-
-
+# Creates Modem object
+# See http://liquidsdr.org/doc/modem/
+# Uses liquid_getopt_str2mod(), modem_create(), modem_get_bps()
 function createmodem(scheme::AbstractString)
 	ms = ccall((:liquid_getopt_str2mod, "libliquid"), Int, (Ptr{UInt8},), scheme);
 	if(ms==0)
