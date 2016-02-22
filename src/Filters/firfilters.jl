@@ -1,6 +1,4 @@
-module FIRFilters
 
-export FIRFilter, createfirfilter
 
 immutable FIRFilter
 	filtobjPtr::Ptr{Void}
@@ -17,5 +15,4 @@ function createfirfilter(h::Array{Complex64})
 end
 
 function recreatefirfilter()
-end
 end
