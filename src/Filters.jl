@@ -14,7 +14,8 @@ export 	IIRFilter,
 		ellip,
 		bessel
 
-export applyfilter
+export 	applyfilter,
+		freqz
 
 function applyfilter(filt::IIRFilter, x::Float64)
 	y = Cfloat[0];
@@ -30,6 +31,15 @@ function applyfilter(filt::IIRFilter, x::Array{Float64})
 		y[i] = applyfilter(filt, x[i]);
 	end
 	return y;
+end
+
+
+function freqz(filt::IIRFilter, fc::Float64)
+	h_len = ccall((:iirfilt_rrrf_get_length, "libliquid"), Int, (Ptr{Void}, ) , filt.filterobjPtr);
+	response = Array(Cfloat, h_len)
+	ccall((:iirfilt_rrrf_freqresponse, "libliquid"), Void, (Ptr{Void} , Cfloat, Ptr{Cfloat}), 
+		filt.filterobjPtr, Cfloat(fc), response)
+	return response;
 end
 
 
